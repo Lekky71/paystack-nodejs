@@ -1,0 +1,50 @@
+{
+  "name": "paystack-nodejs",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "index.js",
+  "engines": {
+    "node": ">=4"
+  },
+  "homepage": "https://github.com/Lekky71/paystack-nodejs",
+  "keywords": [
+    "payment",
+    "API",
+    "naira",
+    "paystack",
+    "nodejs",
+    "paystack-nodejs",
+    "paystack library"
+  ],
+  "bundleDependencies": false,
+  "deprecated": false,
+  "author": {
+    "name": "Fakorede Oluwaleke",
+    "email": "hashilekky@gmail.com"
+  },
+  "dependencies": {
+    "promise": "^7.3.1",
+    "request": "^2.85.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.5.3"
+  },
+  "scripts": {
+    "test": "mocha ./tests/*.js --reporter spec --timeout 10000"
+  },
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "paystack-nodejs",
+    "name": "paystack-nodejs",
+    "escapedName": "paystack-nodejs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lekky71/paystack-nodejs.git"
+  }
+}
