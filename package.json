@@ -31,7 +31,7 @@
     "mocha": "^3.5.3"
   },
   "scripts": {
-    "test": "mocha ./tests/*.js --reporter spec --timeout 10000"
+    "test": "env PAYSTACK_TEST_KEY=sk_test_1e60d83e1029dd5d42e4e9649dfc7c084cee6719 mocha ./tests/*.js --reporter spec --timeout 10000"
   },
   "_requested": {
     "type": "tag",

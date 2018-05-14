@@ -4,7 +4,9 @@ var Promise = require('promise');
 var allBanks = require('./resources/all-banks');
 
 
-function Paystack() {
+var root = 'https://api.paystack.co';
+
+function Paystack(key) {
 
     if (!(this instanceof Paystack)) {
         return new Paystack(key);
@@ -14,218 +16,339 @@ function Paystack() {
     //TRANSFER RECIPIENTS
     Paystack.prototype.all_banks = allBanks;
 
-    var root = 'https://api.paystack.co';
-
     var options = {
         url: root,
         json: true,
         headers: {
             'Authorization': ['Bearer ', this.key].join('')
-        }
-    };
-    Paystack.customer = function () {
-        function create(callback) {
+        },
+        body: {
 
-        }
-
-        function list(callback) {
-
-        }
-
-        function fetch(callback) {
-
-        }
-
-        function update(callback) {
-
-        }
-
-        function whiteList(callback) {
-
-        }
-
-        function blackList(callback) {
-
-        }
-
-        function deactiviate(callback) {
+        },
+        qs: {
 
         }
     };
 
-    Paystack.prototype.transaction = function () {
+    Paystack.prototype.customer = {
+        create: function (email, callback) {
+            options.url = root+'/customer';
+            options.method = 'POST';
+            options.body.email = email;
+            return requestHandler(options, callback);
 
-        function initialize(callback) {
+        },
 
-        }
+        list: function (perPage, page, callback) {
+            options.url = root+'/customer';
+            options.method = 'GET';
+            options.qs.perPage = perPage;
+            options.qs.page = page;
+            return requestHandler(options, callback);
 
-        function verify(callback) {
+        },
 
-        }
+        fetch: function (email, callback) {
+            options.url = root+'/customer/'+email;
+            options.method = 'GET';
+            return requestHandler(options, callback);
 
-        function list(callback) {
+        },
 
-        }
+        update: function (callback) { //generic method todo
+            options.method = 'POST';
+            for(var i =0; i < arguments.length; i++){
+                var arg = arguments[i];
+                if(typeof arg === 'string'){
+                    options.url = root+'/customer/'+ arg.toString();
+                }
+                else if(!(typeof arg === 'function')){
+                    options.body[arg.key] = arg.value;
+                }
+            }
+            return requestHandler(options, callback);
 
-        function fetch(callback) {
+        },
 
-        }
+        whiteList: function (customerId, callback) {
+            options.url = root + '/customer/set_risk_action';
+            options.body.customer = customerId;
+            options.body.risk_action = "allow";
+            options.method = 'POST';
+            return requestHandler(options, callback);
 
-        function chargeAuth(callback) {
+        },
 
-        }
+        blackList: function (customerId, callback) {
+            options.url = root + '/customer/set_risk_action';
+            options.body.customer = customerId;
+            options.body.risk_action = "deny";
+            options.method = 'POST';
+            return requestHandler(options, callback);
 
-        function viewTimeline(callback) {
+        },
 
-        }
-
-        function totals(callback) {
-
-        }
-
-        function exportTransactions(callback) {
-
-        }
-
-        function requestReAuth(callback) {
-
-        }
-
-        function checkAuth(callback) {
-
-        }
-
-    };
-
-    Paystack.prototype.subaccount = function () {
-        function create(callback) {
-
-        }
-
-        function list(callback) {
-
-        }
-
-        function fetch(callback) {
-
-        }
-
-        function update(callback) {
-
-        }
-
-    };
-
-    Paystack.prototype.plan = function () {
-        function create(callback) {
-
-        }
-
-        function list(callback) {
-
-        }
-
-        function fetch(callback) {
-
-        }
-
-        function update(callback) {
+        deactiviate: function (authorization_code, callback) {
+            options.url = root + '/customer/deactivate_authorization';
+            options.body.authorization_code = authorization_code;
+            options.method = 'POST';
+            return requestHandler(options, callback);
 
         }
     };
 
-    Paystack.prototype.subscription = function () {
-        function create(callback) {
+    Paystack.prototype.transaction = {
+        initialize: function (reference,amount, email, callback) { //generic method todo
+            options.url = root + '/transaction/initialize';
+            options.method = 'POST';
+            options.body.reference = reference;
+            options.body.amount = amount;
+            options.body.email = email;
+            return requestHandler(options, callback);
 
-        }
+        },
 
-        function list(callback) {
+        verify: function (callback) {
 
-        }
+            return requestHandler(options, callback);
 
-        function disable(callback) {
+        },
 
-        }
+        list: function (callback) {
 
-        function enable(callback) {
+            return requestHandler(options, callback);
 
-        }
+        },
 
-        function fetch(callback) {
+        fetch: function (callback) {
 
-        }
-    };
+            return requestHandler(options, callback);
 
-    Paystack.prototype.paymentPages = function () {
-        function create(callback) {
+        },
 
-        }
+        chargeAuth: function (callback) {
 
-        function list(callback) {
+            return requestHandler(options, callback);
 
-        }
+        },
 
-        function fetch(callback) {
+        viewTimeline: function (callback) {
 
-        }
+            return requestHandler(options, callback);
 
-        function update(callback) {
+        },
 
-        }
+        totals: function (callback) {
 
-        function checkSlug() {
+            return requestHandler(options, callback);
 
-        }
-    };
+        },
 
-    Paystack.prototype.invoice = function () {
-        function create(callback) {
+        exportTransactions: function (callback) {
 
-        }
+            return requestHandler(options, callback);
 
-        function list(callback) {
+        },
 
-        }
+        requestReAuth: function (callback) {
 
-        function view(callback) {
+            return requestHandler(options, callback);
 
-        }
+        },
 
-        function verify(callback) {
+        checkAuth: function (callback) {
 
-        }
-
-        function sendNotification(callback) {
-
-        }
-
-        function getMetrics(callback) {
-
-        }
-
-        function finalizeDraft(callback) {
-
-        }
-
-        function update(callback) {
-
-        }
-
-        function archive(callback) {
-
-        }
-    };
-
-    Paystack.prototype.settlement = function () {
-        function fetch(callback) {
+            return requestHandler(options, callback);
 
         }
 
     };
 
-    Paystack.prototype.transfer = function () {
+    Paystack.prototype.subaccount = {
+        create: function (callback) {
 
-        function createRecipient(name, description, account_number, bank, metadata, callback) {
+            return requestHandler(options, callback);
+
+        },
+
+        list: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        fetch: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        update: function (callback) {
+
+            return requestHandler(options, callback);
+
+        }
+
+    };
+
+    Paystack.prototype.plan = {
+        create: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        list: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        fetch: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        update: function (callback) {
+
+            return requestHandler(options, callback);
+
+        }
+    };
+
+    Paystack.prototype.subscription = {
+        create: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        list: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        disable: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        enable: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        fetch: function (callback) {
+
+            return requestHandler(options, callback);
+
+        }
+    };
+
+    Paystack.prototype.paymentPages = {
+        create: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        list: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        fetch: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        update: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        checkSlug: function () {
+
+            return requestHandler(options, callback);
+
+        }
+    };
+
+    Paystack.prototype.invoice = {
+        create: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        list: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        view: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        verify: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        sendNotification: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        getMetrics: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        finalizeDraft: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        update: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        archive: function (callback) {
+
+            return requestHandler(options, callback);
+
+        }
+    };
+
+    Paystack.prototype.settlement = {
+        fetch: function (callback) {
+
+            return requestHandler(options, callback);
+
+        }
+
+    };
+
+    Paystack.prototype.transfer = {
+
+        createRecipient: function (name, description, account_number, bank, metadata, callback) {
             var options = {
                 url: [root, "/transferrecipient"].join(''),
                 json: true,
@@ -245,10 +368,10 @@ function Paystack() {
             };
             return requestHandler(options, callback);
 
-        }
+        },
 
 
-        function listRecipients(callback) {
+        listRecipients: function (callback) {
             var options = {
                 url: [root, "/transferrecipient"].join(''),
                 method: 'GET',
@@ -258,10 +381,10 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback)
-        }
+        },
 
         //TRANSFERS
-        function initiateSingle(source, reason, amount, recipient, callback) {
+        initiateSingle: function (source, reason, amount, recipient, callback) {
             var options = {
                 url: [root, "/transfer"].join(''),
                 json: true,
@@ -277,9 +400,9 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback);
-        }
+        },
 
-        function listTransfers(callback) {
+        listTransfers: function (callback) {
             var options = {
                 url: [root, "/transfer"].join(''),
                 method: 'GET',
@@ -289,9 +412,9 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback)
-        }
+        },
 
-        function fetchTransfer(code, callback) {
+        fetchTransfer: function (code, callback) {
             var options = {
                 url: [root, "/transfer/", code.toString()].join(''),
                 method: 'GET',
@@ -301,9 +424,9 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback)
-        }
+        },
 
-        function finalize(transfer_code, otp, callback) {
+        finalize: function (transfer_code, otp, callback) {
             var options = {
                 url: [root, "/transfer/finalize_transfer"].join(''),
                 json: true,
@@ -317,9 +440,9 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback);
-        }
+        },
 
-        function initiateBulk(source, transfers, callback) {
+        initiateBulk: function (source, transfers, callback) {
             var options = {
                 url: [root, "/transfer"].join(''),
                 json: true,
@@ -335,10 +458,10 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback);
-        }
+        },
 
         //TRANSFER CONTROLS
-        function checkBalance(callback) {
+        checkBalance: function (callback) {
             var options = {
                 url: [root, "/balance"].join(''),
                 method: 'GET',
@@ -348,9 +471,9 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback);
-        }
+        },
 
-        function resendOtp(transfer_code, callback) {
+        resendOtp: function (transfer_code, callback) {
             var options = {
                 url: [root, "/transfer/resend_otp"].join(''),
                 json: true,
@@ -363,9 +486,9 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback);
-        }
+        },
 
-        function disableOtp(callback) {
+        disableOtp: function (callback) {
             var options = {
                 url: [root, "/transfer/disable_otp"].join(''),
                 json: true,
@@ -375,9 +498,9 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback);
-        }
+        },
 
-        function finalizeOtpDisable(otp, callback) {
+        finalizeOtpDisable: function (otp, callback) {
             var options = {
                 url: [root, "/transfer/disable_otp_finalize"].join(''),
                 json: true,
@@ -390,9 +513,9 @@ function Paystack() {
                 }
             };
             return requestHandler(options, callback);
-        }
+        },
 
-        function enableOtp(callback) {
+        enableOtp: function (callback) {
             var options = {
                 url: [root, "/transfer"].join(''),
                 json: true,
@@ -407,112 +530,160 @@ function Paystack() {
 
     };
 
-    Paystack.prototype.bulkCharges = function () {
+    Paystack.prototype.bulkCharges = {
 
-        function initiate(callback) {
+        initiate: function (callback) {
 
-        }
+            return requestHandler(options, callback);
 
-        function list(callback) {
+        },
 
-        }
+        list: function (callback) {
 
-        function fetchBulkChargeBatch(callback) {
+            return requestHandler(options, callback);
 
-        }
-        function fetchChargesInBatch(callback) {
+        },
 
-        }
+        fetchBulkChargeBatch: function (callback) {
 
-        function pause(callback) {
+            return requestHandler(options, callback);
 
-        }
+        },
+        fetchChargesInBatch: function (callback) {
 
-        function resume() {
+            return requestHandler(options, callback);
 
-        }
-    };
+        },
 
-    Paystack.prototype.controlPanel = function () {
-        function fetchTimeout(callback) {
+        pause: function (callback) {
 
-        }
+            return requestHandler(options, callback);
 
-        function updateTimeout() {
+        },
 
-        }
-    };
+        resume: function () {
 
-    Paystack.prototype.charge = function () {
-
-        function tokenize(callback) {
-
-        }
-
-        function charge(callback) {
-
-        }
-
-        function submitPin(callback) {
-
-        }
-
-        function submitOtp(callback) {
-
-        }
-
-        function submitPhone() {
-
-        }
-        function submitBirthday() {
-            
-        }
-        function checkPending() {
-            
-        }
-    };
-
-    Paystack.prototype.refunds = function () {
-        function create(callback) {
-
-        }
-
-        function list(callback) {
-
-        }
-
-        function fetch(callback) {
-
-        }
-
-    };
-
-    Paystack.prototype.verification = function () {
-        function resolveBvn(callback) {
-
-        }
-
-        function matchBvn(callback) {
-
-        }
-
-        function resolveAccountNumber(callback) {
-
-        }
-
-        function resolveCardPin(callback) {
-
-        }
-
-        function resolvePhoneNumber() {
+            return requestHandler(options, callback);
 
         }
     };
 
-    Paystack.prototype.miscellaneous = function () {
-        function listbanks() {
+    Paystack.prototype.controlPanel = {
+        fetchTimeout: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        updateTimeout: function () {
+
+            return requestHandler(options, callback);
 
         }
+    };
+
+    Paystack.prototype.charge = {
+
+        tokenize: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        charge: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        submitPin: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        submitOtp: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        submitPhone: function () {
+
+            return requestHandler(options, callback);
+
+        },
+        submitBirthday: function () {
+
+        },
+        checkPending: function () {
+
+        }
+    };
+
+    Paystack.prototype.refund = {
+        create: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        list: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        fetch: function (callback) {
+
+            return requestHandler(options, callback);
+
+        }
+
+    };
+
+    Paystack.prototype.verification = {
+        resolveBvn: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        matchBvn: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        resolveAccountNumber: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        resolveCardPin: function (callback) {
+
+            return requestHandler(options, callback);
+
+        },
+
+        resolvePhoneNumber: function () {
+
+            return requestHandler(options, callback);
+
+        }
+    };
+
+    Paystack.prototype.miscellaneous = {
+
+        listBanks: function (callback) {
+            options.method = 'GET';
+            options.url += '/bank';
+
+            return requestHandler(options, callback);
+
+        }
+
     };
 
     var requestHandler = function (options, callback) {
@@ -542,3 +713,5 @@ function Paystack() {
     }
 
 }
+
+module.exports = Paystack;

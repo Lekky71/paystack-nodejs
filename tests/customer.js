@@ -38,19 +38,19 @@ describe('Paystack Customer', function () {
     //         .done();
     // });
 
-    it('should fetch a customer', function (done) {
-        Paystack.customer.fetch("lekk@gmail.com") //todo change to email var
-            .then(function (body) {
-                console.log(body);
-                expect(body).to.have.property('message');
-                expect(body).to.have.property('status');
-                done();
-            })
-            .catch(function (error) {
-                return done(error);
-            })
-            .done();
-    });
+    // it('should fetch a customer', function (done) {
+    //     Paystack.customer.fetch("lekk@gmail.com") //todo change to email var
+    //         .then(function (body) {
+    //             console.log(body);
+    //             expect(body).to.have.property('message');
+    //             expect(body).to.have.property('status');
+    //             done();
+    //         })
+    //         .catch(function (error) {
+    //             return done(error);
+    //         })
+    //         .done();
+    // });
     //
     // it('should update a customer', function (done) {
     //     Paystack.customer.create("lekk@gmail.com")
@@ -66,19 +66,20 @@ describe('Paystack Customer', function () {
     //         .done();
     // });
     //
-    // it('should whiteList customer', function (done) {
-    //     Paystack.customer.create("lekk@gmail.com")
-    //         .then(function (body) {
-    //             console.log(body);
-    //             expect(body).to.have.property('message');
-    //             expect(body).to.have.property('status');
-    //             done();
-    //         })
-    //         .catch(function (error) {
-    //             return done(error);
-    //         })
-    //         .done();
-    // });
+    it('should whiteList customer', function (done) {
+        // setTimeout(10000);
+        Paystack.customer.whiteList(customerCode)
+            .then(function (body) {
+                console.log(body);
+                expect(body).to.have.property('message');
+                expect(body).to.have.property('status');
+                done();
+            })
+            .catch(function (error) {
+                return done(error);
+            })
+            .done();
+    });
     //
     // it('should blacklist customer', function (done) {
     //     Paystack.customer.create("lekk@gmail.com")
